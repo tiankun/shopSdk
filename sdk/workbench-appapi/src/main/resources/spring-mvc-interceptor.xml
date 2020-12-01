@@ -13,7 +13,7 @@
         <property name="fileEncoding" value="utf-8"/>
     </bean>
 
-    <mvc:interceptors>
+   <!-- <mvc:interceptors>
        <mvc:interceptor>
             <mvc:mapping path="/**"/>
             <bean class="com.redare.shop.unifyworkbench.appapi.interceptor.ApiVerifyInterceptor">
@@ -41,6 +41,6 @@
             <bean class="com.redare.shop.unifyworkbench.appapi.interceptor.LoginInterceptor"/>
         </mvc:interceptor>
 
-    </mvc:interceptors>
+    </mvc:interceptors>-->
 
 </beans>
