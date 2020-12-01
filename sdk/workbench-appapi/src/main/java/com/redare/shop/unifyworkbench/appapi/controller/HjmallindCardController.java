@@ -4,7 +4,6 @@ import com.redare.devframework.common.pojo.CommonResult;
 import com.redare.devframework.webplatform.sdk.core.UserSdk;
 import com.redare.devframework.webplatform.sdk.core.arg.UserArg;
 import com.redare.devframework.webplatform.sdk.core.pojo.User;
-import com.redare.shop.unifyworkbench.appapi.controller.base.LoginController;
 import com.redare.shop.unifyworkbench.sdk.HjmallindCardSdk;
 import com.redare.shop.unifyworkbench.sdk.pojo.HjmallindCard;
 import com.redare.shop.unifyworkbench.sdk.pojo.form.HjmallindCardForm;

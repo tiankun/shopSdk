@@ -34,7 +34,7 @@ import java.util.Map;
 
 
 @Controller
-@RequestMapping("/user")
+@RequestMapping("/login")
 public class LoginController extends BaseApiController {
     private static Logger logger = LoggerFactory.getLogger(LoginController.class);
     @Autowired
