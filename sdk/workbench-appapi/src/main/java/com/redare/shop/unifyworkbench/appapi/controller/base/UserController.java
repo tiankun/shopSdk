@@ -8,10 +8,6 @@ import com.redare.devframework.webplatform.sdk.core.arg.UserArg;
 import com.redare.devframework.webplatform.sdk.core.pojo.Account;
 import com.redare.devframework.webplatform.sdk.core.pojo.User;
 import com.redare.shop.unifyworkbench.appapi.controller.BaseApiController;
-import com.redare.shop.unifyworkbench.sdk.ActivitySdk;
-import com.redare.shop.unifyworkbench.sdk.common.BaseUserInfoSdk;
-import com.redare.shop.unifyworkbench.sdk.common.pojo.BaseUserInfo;
-import com.redare.shop.unifyworkbench.sdk.pojo.form.UserOrgForm;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -30,12 +26,6 @@ public class UserController extends BaseApiController {
 
     @Autowired
     AccountSdk accountSdk;
-
-    @Autowired
-    BaseUserInfoSdk baseUserInfoSdk;
-
-    @Autowired
-    ActivitySdk activitySdk;
 
     @ResponseBody
     @RequestMapping(value = "/info", method = RequestMethod.POST)
@@ -98,45 +88,5 @@ public class UserController extends BaseApiController {
             HttpServletRequest request
     ) {
         return userSdk.findUserList(form);
-    }
-
-    @ResponseBody
-    @RequestMapping(value = "/list/by/OrgId", method = RequestMethod.POST)
-    public CommonResult<List<com.redare.shop.unifyworkbench.sdk.pojo.User>> findUserListByOrgId(
-            @RequestBody UserOrgForm.Get form,
-            HttpServletRequest request
-    ) {
-        return activitySdk.findUserListByOrgId(form);
-    }
-
-    /**
-     * @description 切换组织刷新session中的值
-     * @author zlx
-     * @date 2020/10/24 15:49
-     * @param orgId
-     * @return com.redare.devframework.common.pojo.CommonResult<com.redare.devframework.webplatform.sdk.core.pojo.User>
-     */
-    @Transactional
-    @ResponseBody
-    @RequestMapping(value = "/resetUser", method = RequestMethod.POST)
-    public CommonResult<User> resetSessionUserData(
-            @RequestParam(value = "orgId", required = false) String orgId,
-            @RequestParam(value = "userId", required = false) Long userId
-    ) {
-        User user = userSdk.getUser(new AccountArg.Get()
-                .setId(userId)).getData();
-        BaseUserInfo baseUserInfo = new BaseUserInfo();
-        if (user.getPlatform().equals("shop")) {
-            BaseUserInfo form = new BaseUserInfo();
-            form.setUserId(user.getUserId());
-            form.setOrgId(orgId);
-            //再次去查询用户基本信息（组织和区域等）
-            baseUserInfo = baseUserInfoSdk.queryBaseUserInfo(form).getData();
-            if(baseUserInfo == null){
-                return CommonResult.returnFailsWrapper("用户没有分配组织");
-            }
-        }
-        BeanUtils.copyProperties(user, baseUserInfo);
-        return returnSuccessWrapper(baseUserInfo);
     }
 }

@@ -6,7 +6,6 @@ import com.redare.devframework.common.utils.JsonUtils;
 import com.redare.devframework.common.validation.ValidationUtils;
 import com.redare.devframework.smsgateway.sdk.SmsSendSdk;
 import com.redare.devframework.smsgateway.sdk.pojo.arg.SmsSendArg;
-import com.redare.devframework.sso.webserver.pojo.SsoToken;
 import com.redare.devframework.webplatform.sdk.core.AccountSdk;
 import com.redare.devframework.webplatform.sdk.core.UserSdk;
 import com.redare.devframework.webplatform.sdk.core.arg.AccountArg;
@@ -20,10 +19,6 @@ import com.redare.shop.unifyworkbench.appapi.pojo.base.form.AccountForm;
 import com.redare.shop.unifyworkbench.appapi.utils.BsUtils;
 import com.redare.shop.unifyworkbench.appapi.utils.DesUtils;
 import com.redare.shop.unifyworkbench.appapi.utils.Fields;
-import com.redare.shop.unifyworkbench.sdk.LoginLogSdk;
-import com.redare.shop.unifyworkbench.sdk.common.BaseUserInfoSdk;
-import com.redare.shop.unifyworkbench.sdk.common.pojo.BaseUserInfo;
-import com.redare.shop.unifyworkbench.sdk.pojo.form.LoginLogForm;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -58,12 +53,6 @@ public class LoginController extends BaseApiController {
     @Autowired
     AccountSdk accountSdk;
 
-
-    @Autowired
-    LoginLogSdk loginLogSdk;
-    @Autowired
-    BaseUserInfoSdk baseUserInfoSdk;
-
     @Transactional
     @ResponseBody
     @RequestMapping(value = "/login", method = RequestMethod.POST)
@@ -83,53 +72,10 @@ public class LoginController extends BaseApiController {
         if (user == null) {
             return CommonResult.returnFailsWrapper("账号或密码错误");
         }
-        if (user.getStatus() != 0) {
-            LoginLogForm.Add addForm = new LoginLogForm.Add();
-            addForm.setClassify("登录日志");
-            addForm.setOperator(form.getAccount());
-            addForm.setContent("账号异常，请联系管理员");
-            addForm.setSource("手机端登录");
-            addForm.setCreateTime(new Date());
-            loginLogSdk.addLoginLog(addForm);
-            return CommonResult.returnFailsWrapper("账号异常，请联系管理员");
 
-        }
         String passWord = DigestUtils.md5Hex(form.getPwd());
-        if (!passWord.equalsIgnoreCase(user.getPwd())) {
-            LoginLogForm.Add addForm = new LoginLogForm.Add();
-            addForm.setClassify("登录日志");
-            addForm.setOperator(form.getAccount());
-            addForm.setContent("账号或密码错误");
-            addForm.setSource("手机端登录");
-            addForm.setCreateTime(new Date());
-            loginLogSdk.addLoginLog(addForm);
-            return CommonResult.returnFailsWrapper("账号或密码错误");
-        }
-        user.setPwd(null);
-        LoginLogForm.Add addForm = new LoginLogForm.Add();
-        addForm.setClassify("登录日志");
-        addForm.setOperator(form.getAccount());
-        addForm.setContent("登录成功");
-        addForm.setSource("手机端登录");
-        addForm.setCreateTime(new Date());
-        loginLogSdk.addLoginLog(addForm);
 
-        //合并用户信息
-        BaseUserInfo baseUserInfo = new BaseUserInfo();
-        if (user.getPlatform().equals("shop")) {
-            BaseUserInfo baseUserInfoForm = new BaseUserInfo();
-            BeanUtils.copyProperties(user, baseUserInfoForm);
-            baseUserInfoForm.setOrgId(user.getUserPlatform());
-            //再次去查询用户基本信息（组织和区域等）
-            baseUserInfo = baseUserInfoSdk.queryBaseUserInfo(baseUserInfoForm).getData();
-            if(baseUserInfo == null){
-                return CommonResult.returnFailsWrapper("用户没有分配组织");
-            }
-        }
-        BeanUtils.copyProperties(user, baseUserInfo);
-
-
-        return CommonResult.returnSuccessWrapper(baseUserInfo);
+        return CommonResult.returnSuccessWrapper(user);
     }
 
     /**
