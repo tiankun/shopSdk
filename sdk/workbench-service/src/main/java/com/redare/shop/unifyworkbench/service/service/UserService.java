@@ -9,7 +9,6 @@ import com.redare.devframework.webplatform.service.core.service.AccountService;
 import com.redare.shop.unifyworkbench.sdk.pojo.User;
 import com.redare.shop.unifyworkbench.service.dao.UserDao;
 import com.redare.shop.unifyworkbench.service.pojo.arg.UserArg;
-import com.redare.shop.unifyworkbench.sdk.pojo.form.TreeNode;
 import com.redare.shop.unifyworkbench.sdk.pojo.form.UserForm;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
@@ -133,11 +132,6 @@ public class UserService {
     public boolean resetUserPwd(UserForm.ResetPwd form) {
         return userDao.resetUserPwd(form) > 0;
     }
-
-    public List<TreeNode> findUserTreeNode(UserForm.Search form) {
-        return userDao.findUserTreeNode(form);
-    }
-
     /**
      * @description 根据逗号分隔的角色id和机构id查询可用的用户信息
      * @author zlx

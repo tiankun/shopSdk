@@ -11,9 +11,7 @@ import com.redare.devframework.webplatform.sdk.core.arg.RoleArg;
 import com.redare.devframework.webplatform.sdk.core.pojo.Account;
 import com.redare.devframework.webplatform.sdk.core.pojo.PlatformMenu;
 import com.redare.shop.unifyworkbench.sdk.UserSdk;
-import com.redare.shop.unifyworkbench.sdk.pojo.OrganizationTree;
 import com.redare.shop.unifyworkbench.sdk.pojo.User;
-import com.redare.shop.unifyworkbench.sdk.pojo.form.TreeNode;
 import com.redare.shop.unifyworkbench.sdk.pojo.form.UserForm;
 import com.redare.shop.unifyworkbench.service.pojo.arg.UserArg;
 import com.redare.shop.unifyworkbench.service.service.UserService;
@@ -45,12 +43,6 @@ public class UserSdkImpl implements UserSdk {
 
     @Autowired
     PlatformSdk platformSdk;
-
-
-
-
-    List<OrganizationTree> organizationTreeList;
-    List<TreeNode> userTreeList;
 
     /**
      * @description 根据手机号码查询用户信息
@@ -390,133 +382,5 @@ public class UserSdkImpl implements UserSdk {
             this.editUser(new UserForm.Edit().setUserId(user.getId()).setWxOpenId(""));
         }
         return CommonResult.returnBoolWrapper(bl,"重置失败");
-    }
-
-//    @Override
-//    @Deprecated
-//    public CommonResult<List<OrganizationTree>> orgAndUserTree(Organization form) {
-//        if (this.organizationTreeList != null) {
-//            return CommonResult.returnSuccessWrapper(this.organizationTreeList);
-//        }
-//        final List<OrganizationTree> organizationTreeList = organizationManageService.findOrganizationTree();
-//        final Iterator<OrganizationTree> iterator = organizationTreeList.iterator();
-//        warraperChildren(iterator);
-//        List<OrganizationTree> organizationTreeRoot = new ArrayList<>();
-//        OrganizationTree root = new OrganizationTree();
-//        root.setChildren(Lists.newArrayList());
-//        root.setKey(0L);
-//        root.setTitle("root");
-//        root.setParentId(0L);
-//        root.setSelectable(true);
-//        root.setChildren(organizationTreeList);
-//        organizationTreeRoot.add(root);
-//        this.organizationTreeList = organizationTreeRoot;
-//        return CommonResult.returnSuccessWrapper(organizationTreeList);
-//
-//    }
-
-    private void warraperChildren(Iterator<OrganizationTree> iterator) {
-        while (iterator.hasNext()) {
-            final OrganizationTree next = iterator.next();
-            if (next.getParentId() != null && next.getParentId().longValue() == -1L) {
-                continue;
-            }
-
-            List<User> userList = userService.findUserListByOrgId(new UserForm.Search().setOrgId(next.getKey()));
-            List<OrganizationTree> userChildren = new ArrayList<>();
-            //如果有下级机构 默认加入
-            if (next.getChildren() != null) {
-                userChildren.addAll(next.getChildren());
-            }
-            for (User user : userList) {
-                OrganizationTree tree = new OrganizationTree();
-                tree.setKey(user.getUserId());
-                tree.setTitle(user.getName());
-                tree.setParentId(-1L);
-                //继续追加User
-                userChildren.add(tree);
-            }
-
-            next.setChildren(userChildren);
-            if (next.getChildren() == null || next.getChildren().size() == 0) {
-                continue;
-            }
-
-            warraperChildren(next.getChildren().iterator());
-        }
-    }
-
-//    @Override
-//    public CommonResult<Map<String, List<TreeNode>>> findOrganizationTreeNode(OrganizationForm.Search form) {
-//        final List<TreeNode> organizationTreeList = organizationManageService.findOrganizationTreeNode(form);
-//        List<TreeNode> userTreeList = userService.findUserTreeNode(new UserForm.Search());
-//        this.userTreeList = userTreeList;
-//
-//        //新包装Tree的返回值
-//        List<TreeNode> resultTree = new ArrayList<>();
-//        //新包装Array的返回值
-//        List<TreeNode> resultList = new ArrayList<>();
-//
-//        //包含root节点
-//        if (form.getIncludeRoot() != null && form.getIncludeRoot()) {
-//            TreeNode treeNode = new TreeNode();
-//            treeNode.setKey(ORG_ID_PREFIX + "-1");
-//            treeNode.setTitle("全部");
-//            treeNode.setChildren(getChilds(null, organizationTreeList));
-//
-//            resultTree.add(treeNode);
-//        } else {
-//            resultTree.addAll(getChilds(null, organizationTreeList));
-//        }
-//
-//        resultList.addAll(organizationTreeList);
-//        resultList.addAll(userTreeList);
-//
-//        final Map<String, List<TreeNode>> map = new HashMap<>();
-//        map.put("resultTree", resultTree);
-//        map.put("resultList", resultList);
-//
-//        return CommonResult.returnSuccessWrapper(map);
-//    }
-
-    private List<TreeNode> getChilds(String pId, List<TreeNode> list) {
-        List<TreeNode> result = new ArrayList<>();
-
-        final Iterator<TreeNode> iterator = list.iterator();
-        while (iterator.hasNext()) {
-            final TreeNode treeNode = iterator.next();
-            //如果是用户子节点
-            if (treeNode.isLeaf()) {
-                continue;
-            }
-            //id
-            if (pId == null) {
-                if (treeNode.getParentId() == null) {
-
-                    treeNode.setChildren(getChilds(treeNode.getKey(), list));
-                    treeNode.setKey(ORG_ID_PREFIX + treeNode.getKey());
-                    result.add(treeNode);
-                }
-            } else if (treeNode.getParentId() != null && pId.equals(treeNode.getParentId())) {
-                List<TreeNode> userChildren = new ArrayList<>();
-                //如果有叶子节点机构 默认加入用户
-                if (treeNode.getChildren() == null) {
-                    userChildren.addAll(getUserTree(treeNode.getKey()));
-                }
-                userChildren.addAll(getChilds(treeNode.getKey(), list));
-                treeNode.setChildren(userChildren);
-                treeNode.setKey(ORG_ID_PREFIX + treeNode.getKey());
-                result.add(treeNode);
-            }
-        }
-        return result;
-    }
-
-    private Collection<? extends TreeNode> getUserTree(String key) {
-        return getUserTreeList().stream().filter(e -> e.getParentId() != null && e.getParentId().equals(key)).collect(Collectors.toList());
-    }
-
-    public List<TreeNode> getUserTreeList() {
-        return userTreeList;
     }
 }

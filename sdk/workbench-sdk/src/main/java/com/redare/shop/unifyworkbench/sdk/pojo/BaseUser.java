@@ -115,17 +115,6 @@ public class BaseUser extends User implements Serializable {
      * '备注'
      */
     private String remark;
-
-    /**
-     * '岗位信息'
-     */
-    private List<UserOrg> userOrgList;
-
-    /**
-     * 荣誉信息
-     */
-    private List<UserHonor> userHonorList;
-
     private String orgId;
     private String orgName;
     /**
@@ -351,22 +340,6 @@ public class BaseUser extends User implements Serializable {
 
     public void setRemark(String remark) {
         this.remark = remark;
-    }
-
-    public List<UserOrg> getUserOrgList() {
-        return userOrgList;
-    }
-
-    public void setUserOrgList(List<UserOrg> userOrgList) {
-        this.userOrgList = userOrgList;
-    }
-
-    public List<UserHonor> getUserHonorList() {
-        return userHonorList;
-    }
-
-    public void setUserHonorList(List<UserHonor> userHonorList) {
-        this.userHonorList = userHonorList;
     }
 
     public String getOrgId() {

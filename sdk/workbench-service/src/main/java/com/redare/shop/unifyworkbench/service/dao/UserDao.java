@@ -4,7 +4,6 @@ import com.redare.devframework.common.pojo.Page;
 import com.redare.devframework.sql.Sql;
 import com.redare.devframework.sql.db.base.SpringJdbcHelper;
 import com.redare.shop.unifyworkbench.sdk.pojo.User;
-import com.redare.shop.unifyworkbench.sdk.pojo.form.TreeNode;
 import com.redare.shop.unifyworkbench.sdk.pojo.form.UserForm;
 import com.redare.shop.unifyworkbench.service.pojo.arg.UserArg;
 import org.apache.commons.collections.CollectionUtils;
@@ -260,25 +259,6 @@ public class UserDao {
                 .andEqIfNotBlank("account", form.getAccount());
         return jdbcHelper.update(sql.toString(), sql.getParams().toArray());
     }
-
-    /**
-     * 用户结构树
-     * @param form
-     * @return
-     */
-    public List<TreeNode> findUserTreeNode(UserForm.Search form){
-        Sql sql = Sql.select()
-                .field("userId","`key`")
-                .field("name","title")
-                .field("orgId","parentId")
-                .field("true as isLeaf")
-                .from("base_user")
-                .where()
-                .andEqIfNotNull("orgId",  form.getOrgId());
-
-        return jdbcHelper.queryForListBean(sql.toString(), TreeNode.class, sql.getParams().toArray());
-    }
-
 
     /**
      * @description 根据逗号分隔的角色id和机构id查询可用的用户信息
