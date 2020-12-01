@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<!DOCTYPE Configure PUBLIC "-//Jetty//Configure//EN" "http://www.eclipse.org/jetty/configure_9_0.dtd">
+
+<Configure id="Server" class="org.eclipse.jetty.server.Server">
+
+    <Get name="ThreadPool">
+        <Set name="minThreads" type="int">10</Set>
+        <Set name="maxThreads" type="int">200</Set>
+        <Set name="idleTimeout" type="int">60000</Set>
+        <Set name="detailedDump">false</Set>
+    </Get>
+
+    <Call name="addBean">
+        <Arg>
+            <New class="org.eclipse.jetty.util.thread.ScheduledExecutorScheduler"/>
+        </Arg>
+    </Call>
+
+    <!-- =========================================================== -->
+    <!-- Add a http Connector                                         -->
+    <!-- =========================================================== -->
+    <Call name="addConnector">
+        <Arg>
+            <New class="org.eclipse.jetty.server.ServerConnector">
+                <Arg name="server">
+                    <Ref refid="Server"/>
+                </Arg>
+                <Set name="port">9100</Set>
+            </New>
+        </Arg>
+    </Call>
+
+    <Set name="handler">
+        <New class="org.eclipse.jetty.webapp.WebAppContext">
+            <Set name="contextPath">/</Set>
+            <Set name="descriptor">conf/web.xml</Set>
+            <Set name="resourceBase">webapp/</Set>
+            <Set name="maxFormContentSize" type="int">1000000</Set>
+        </New>
+    </Set>
+
+</Configure>

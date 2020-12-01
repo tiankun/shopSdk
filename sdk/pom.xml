@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <jetty.version>9.4.22.v20191022</jetty.version>
+        <spring.version>4.3.25.RELEASE</spring.version>
+        <project.major.version>1.0.0</project.major.version>
+    </properties>
+
+    <groupId>com.redare.shop</groupId>
+    <artifactId>shop-workbench</artifactId>
+    <packaging>pom</packaging>
+    <version>1.0</version>
+    <modules>
+        <module>workbench-sdk</module>
+        <module>workbench-service</module>
+        <module>workbench-appapi</module>
+    </modules>
+
+
+</project>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="
+			http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+			http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <context:annotation-config/>
+    <bean class="com.redare.shop.unifyworkbench.appapi.config.AppApiConfig">
+        <property name="smsBsId" value="${sms.bsId}"/>
+    </bean>
+
+    <!--统一工作台-->
+    <context:component-scan
+            base-package="sdkhttpcomponents.com.redare.shop.unifyworkbench.sdk.httpclient.sdkimpl"/>
+    <bean class="sdkhttpcomponents.com.redare.shop.unifyworkbench.sdk.httpclient.HttpClientConfig">
+        <property name="url" value="${service.workbench.url}"/>
+        <property name="urlKey" value="${service.workbench.urlKey}"/>
+    </bean>
+
+    <!--网站后台-->
+    <context:component-scan
+            base-package="sdkhttpcomponents.com.redare.shop.webportals.sdk.httpclient.sdkimpl"/>
+    <bean class="sdkhttpcomponents.com.redare.shop.webportals.sdk.httpclient.HttpClientConfig">
+        <property name="url" value="${service.webportals.url}"/>
+        <property name="urlKey" value="${service.webportals.urlKey}"/>
+    </bean>
+
+
+    <!--WebPlatform基础模块-->
+    <context:component-scan
+            base-package="sdkhttpcomponents.com.redare.devframework.webplatform.sdk.httpclient.sdkimpl"/>
+    <bean class="sdkhttpcomponents.com.redare.devframework.webplatform.sdk.httpclient.HttpClientConfig">
+        <property name="url" value="${service.webplatform.url}"/>
+        <property name="urlKey" value="${service.webplatform.urlKey}"/>
+    </bean>
+
+    <!--短信模块-->
+    <context:component-scan base-package="sdkhttpcomponents.com.redare.devframework.smsgateway.sdk.httpclient.sdkimpl"/>
+    <bean class="sdkhttpcomponents.com.redare.devframework.smsgateway.sdk.httpclient.HttpClientConfig">
+        <property name="url" value="${sms.server.url}"/>
+        <property name="urlKey" value="${sms.server.url.key}"/>
+        <property name="timeOut" value="${sms.server.timeOut}"/>
+    </bean>
+</beans>

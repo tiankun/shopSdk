@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>classpath:config.properties</value>
+            </list>
+        </property>
+        <property name="fileEncoding" value="utf-8"/>
+    </bean>
+
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/*1111111*"/>
+            <bean class="sdkhttpcomponents.com.redare.shop.unifyworkbench.sdk.httpserver.spring.interceptor.AccessInterceptor">
+                <property name="signature">
+                    <bean class="com.redare.devframework.common.utils.http.DefaultUrlSignatureImpl">
+                        <property name="key" value="${service.url.key}"/>
+                    </bean>
+                </property>
+            </bean>
+        </mvc:interceptor>
+    </mvc:interceptors>
+
+</beans>

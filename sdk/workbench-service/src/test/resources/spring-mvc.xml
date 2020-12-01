@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+				http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+				http://www.springframework.org/schema/mvc
+                http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+    <context:annotation-config/>
+
+    <context:component-scan base-package="sdkhttpcomponents.com.redare.shop.unifyworkbench.sdk.httpserver.spring.controller"/>
+
+    <bean id="conversionService" class="org.springframework.context.support.ConversionServiceFactoryBean">
+        <property name="converters">
+            <set>
+                <bean class="com.redare.devframework.common.spring.converter.TrimStringConvert"/>
+                <bean class="com.redare.devframework.common.spring.converter.StringToDateConvert"/>
+                <bean class="com.redare.devframework.common.spring.converter.StringToIntConvert"/>
+                <bean class="com.redare.devframework.common.spring.converter.StringToLongConvert"/>
+                <bean class="com.redare.devframework.common.spring.converter.StringToDoubleConvert"/>
+                <bean class="com.redare.devframework.common.spring.converter.StringToShortConvert"/>
+                <bean class="com.redare.devframework.common.spring.converter.StringToFloatConvert"/>
+            </set>
+        </property>
+    </bean>
+
+    <mvc:annotation-driven conversion-service="conversionService">
+        <mvc:message-converters register-defaults="false">
+            <bean class="org.springframework.http.converter.StringHttpMessageConverter">
+                <property name="supportedMediaTypes">
+                    <list>
+                        <value>text/plain;charset=UTF-8</value>
+                        <value>text/html;charset=UTF-8</value>
+                    </list>
+                </property>
+            </bean>
+            <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+                <property name="objectMapper">
+                    <bean class="com.redare.devframework.common.utils.jackson.XssObjectMapper">
+                        <property name="serializationInclusion" value="NON_NULL"/>
+                        <property name="ignoreUnknownProperties" value="true"/>
+                    </bean>
+                </property>
+                <property name="supportedMediaTypes">
+                    <list>
+                        <value>application/json;charset=UTF-8</value>
+                        <value>application/x-www-form-urlencoded;charset=UTF-8</value>
+                    </list>
+                </property>
+            </bean>
+        </mvc:message-converters>
+    </mvc:annotation-driven>
+
+    <bean class="com.redare.devframework.common.spring.mvc.JsonHandlerExceptionResolver"/>
+
+    <import resource="spring-mvc-interceptor.xml"/>
+
+</beans>

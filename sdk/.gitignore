@@ -1,0 +1,49 @@
+.DS_Store
+.idea/
+*.iml
+*/*/target/
+*/target/
+.target/
+#**/staticdata/
+**/cachedata
+*/webapp/upload
+*/tmp
+**/.idea/
+
+**/webapp/Admin
+**/webapp/AdminSrc/build/
+**/webapp/AdminSrc/bootstrap.js*
+**/webapp/AdminSrc/sass/example/*.json*
+
+
+# dependencies
+**/webappsrc/node_modules
+.pnp
+.pnp.js
+yarn.lock
+
+# testing
+**/webappsrc/coverage
+
+# production
+**/webappsrc/build
+
+**/webappsrc/.idea
+**/webappsrc/src/.gen
+
+**/node_modules
+**/sdkhttpcomponents
+
+# misc
+.DS_Store
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+
+**/webapp/react/
